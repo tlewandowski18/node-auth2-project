@@ -23,10 +23,17 @@ function findById(id) {
         .select("id", "username", "department")
 }
 
+function findByDepartment(department) {
+    return db("users")
+        .where({ department })
+        .select("id", "username", "department")
+}
+
 module.exports = {
     add,
     find,
     findBy,
-    findById
+    findById,
+    findByDepartment
 }
 

@@ -47,8 +47,19 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/users", restrict(), async (req, res, next) => {
     try {
-        const users = await Users.find()
-        res.json(users)
+        const department = req.token.userDepartment
+        console.log(department)
+        if (!department) {
+            res.status(401).json({
+                message: "You must be assigned to department to see users"
+            })
+        } else if (department === "admin") {
+            const users = await Users.find()
+            res.json(users)
+        } else {
+            const users = await Users.findByDepartment(department)
+            res.json(users)
+        }
     } catch(err) {
         next(err)
     }
